@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import HomeVM from "./HomeVM";
 import styled from "styled-components";
+import { JOKE_CATEGORIES, JOKE_TYPE, LANGUAGES } from "../../utils/constants";
 
 const StyledContainer = styled.div`
   margin-top: 20px;
@@ -9,6 +10,7 @@ const StyledContainer = styled.div`
 const StyledRow = styled.div`
   display: flex;
   flex-direction: row;
+  gap: 10px;
 `;
 
 const StyledRCol = styled.div`
@@ -23,19 +25,20 @@ function Home() {
     likedJokes,
     onClickLikeJoke,
     onClickDeslikeJoke,
-    onClickShowLikedJokes,
+    removeJoke,
     showLikedJokes,
     setShowLikedJokes,
+    category,
+    type,
+    language,
+    handleCategoryChange,
+    handleLanguageChange,
+    handleTypeChange,
   } = HomeVM();
 
   useEffect(() => {
     fetchRandomJoke();
   }, []);
-
-  Object.values(likedJokes).map((joke) => {
-    console.log(joke);
-    return joke;
-  });
 
   return (
     <StyledContainer>
@@ -47,6 +50,54 @@ function Home() {
         <button onClick={onClickDeslikeJoke} name="deslike">
           Dislike
         </button>{" "}
+        <StyledRCol>
+          <label htmlFor="categories">Categories</label>
+          <select
+            name="categories"
+            id="categories"
+            value={category}
+            onChange={handleCategoryChange}
+          >
+            <option value={""}>--select---</option>
+            {JOKE_CATEGORIES.map((category) => (
+              <option value={category} key={category}>
+                {category}
+              </option>
+            ))}
+          </select>
+        </StyledRCol>
+        <StyledRCol>
+          <label htmlFor="language">Languages</label>
+          <select
+            name="language"
+            id="language"
+            value={language}
+            onChange={handleLanguageChange}
+          >
+            <option value={""}>--select---</option>
+            {LANGUAGES.map((language) => (
+              <option value={language.id} key={language.id}>
+                {language.name}
+              </option>
+            ))}
+          </select>
+        </StyledRCol>
+        <StyledRCol>
+          <label htmlFor="type">Type</label>
+          <select
+            name="type"
+            id="type"
+            value={type}
+            onChange={handleTypeChange}
+          >
+            <option value={""}>--select---</option>
+            {JOKE_TYPE.map((type) => (
+              <option value={type} key={type}>
+                {type}
+              </option>
+            ))}
+          </select>
+        </StyledRCol>
       </StyledRow>
       <StyledRow>
         <button
@@ -59,7 +110,14 @@ function Home() {
       <StyledRCol>
         {showLikedJokes &&
           Object.values(likedJokes).map((joke) => (
-            <StyledRow key={joke.id}>{joke.description}</StyledRow>
+            <StyledRow key={joke.id}>
+              <div>{joke.description}</div>
+              <div>
+                <button onClick={() => removeJoke(joke)} name="remove-joke">
+                  Remove
+                </button>{" "}
+              </div>
+            </StyledRow>
           ))}
       </StyledRCol>
     </StyledContainer>
