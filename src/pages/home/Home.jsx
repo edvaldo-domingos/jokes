@@ -38,7 +38,7 @@ function Home() {
 
   useEffect(() => {
     fetchRandomJoke();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <StyledContainer>
